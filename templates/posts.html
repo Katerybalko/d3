@@ -25,6 +25,7 @@ Posts
                <td>Название</td>
                <td>Дата</td>
                <td>Текст</td>
+               <td>Тип</td>
            </tr>
 
            <!-- Для каждого товара будете генерироваться новая строчка,
@@ -40,6 +41,8 @@ Posts
                <td>{{ post.title|censor }}</td>
                <td>{{ post.post_time|date:'M d Y' }}</td>
                <td>{{ post.text|censor|truncatewords:20 }}</td>
+               <td>{{ post.post_type }}</td>
+
 
            </tr>
            {% endfor %}

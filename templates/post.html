@@ -17,6 +17,7 @@ Post
               <h1> <td>{{ post.post_time|date:'d M  Y' }}</td></h1>
      <h></h>
                <h4><td>{{ post.text|censor }}</td></h4>
+<h4><td>{{ post.get_article_news_display }}</td></h4>
 
 </tr>
 {% endblock content %}

@@ -1,12 +1,16 @@
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
 
     def update_rating(self):
         posts_rating = 0
@@ -54,6 +58,9 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
     rating = models.IntegerField(default=0)
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.title.title()}: {self.text[:120]}'
