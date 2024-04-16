@@ -35,12 +35,6 @@ class ProductDetail(DetailView):
     context_object_name = 'post'
 
 
-# class PostUpdate(UpdateView):
-# form_class = PostForm
-# model = Post
-# template_name = 'news_edit.html'
-
-
 class NewsCreate(CreateView):
     permission_required = 'news.add_post'
     form_class = PostForm
@@ -49,8 +43,8 @@ class NewsCreate(CreateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        if self.request.path == '/news/article/create':
-            post.article_news = 'AR'
+        if self.request.path == '/news/article/create/':
+            post.post_type = 'AR'
         post.save()
         return super().form_valid(form)
 
@@ -62,7 +56,6 @@ class NewsUpdate(UpdateView):
 
 
 class NewsDelete(DeleteView):
-    form_class = PostForm
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
@@ -73,29 +66,8 @@ class ArticleUpdate(UpdateView):
     template_name = 'article_edit.html'
 
 class ArticleDelete(DeleteView):
-    form_class = PostForm
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
-
-# class PostCreate(CreateView):
-# form_class = PostForm
-# model = Post
-# template_name = 'news_edit.html'
-# def create_news(request):
-# form = PostForm()
-# if request.method == 'POST':
-# form = PostForm(request.POST)
-# if form.is_valid():
-# form.save()
-# return HttpResponseRedirect('/news/')
-
-# return render(request, 'news_edit.html', {'form': form})
-
-# class PostDelete(DeleteView):
-# model = Post
-# template_name = 'post_delete.html'
-# success_url = reverse_lazy('post_list')
-
 
 # Create your views here.

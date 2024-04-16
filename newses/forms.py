@@ -11,17 +11,13 @@ class PostForm(forms.ModelForm):
            'author',
            'text',
        ]
-
-
-def clean(self):
-    cleaned_data = super().clean()
-    name = cleaned_data.get("title")
-    description = cleaned_data.get("text")
-
-    if name == description:
-        raise ValidationError(
-            "Текст не должен быть идентичен названию."
-        )
-
-    return cleaned_data
+       def clean(self):
+           cleaned_data = super().clean()
+           name = cleaned_data.get("title")
+           description = cleaned_data.get("text")
+           if name == description:
+               raise ValidationError(
+                   "Текст не должен быть идентичен названию."
+               )
+           return cleaned_data
 
