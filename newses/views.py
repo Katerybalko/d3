@@ -1,12 +1,15 @@
 from django.contrib.sites import requests
 from django.shortcuts import render
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 
 
 class PostsList(ListView):
@@ -35,7 +38,8 @@ class ProductDetail(DetailView):
     context_object_name = 'post'
 
 
-class NewsCreate(CreateView):
+class NewsCreate(LoginRequiredMixin, CreateView):
+    raise_exception = True
     permission_required = 'news.add_post'
     form_class = PostForm
     model = Post
@@ -47,6 +51,10 @@ class NewsCreate(CreateView):
             post.post_type = 'AR'
         post.save()
         return super().form_valid(form)
+
+    #@login_required
+    #def show_protected_page(request):
+        #// do something protected
 
 
 class NewsUpdate(UpdateView):
@@ -71,3 +79,5 @@ class ArticleDelete(DeleteView):
     success_url = reverse_lazy('post_list')
 
 # Create your views here.
+
+
