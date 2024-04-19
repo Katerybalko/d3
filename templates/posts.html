@@ -18,7 +18,10 @@ Posts
    </form>
 
    <hr>
-
+{% if perms.newses.news_create or perms.newses.article_create %}
+    <a href="{% url 'news_create' %}">Добавить новость</a>
+<a href="{% url 'article_create' %}">Добавить статью</a>
+    {% endif %}
    {% if posts %}
        <table>
            <tr>
@@ -26,6 +29,9 @@ Posts
                <td>Дата</td>
                <td>Текст</td>
                <td>Тип</td>
+               {% if perms.newses.news_update or perms.newses.article_delete %}
+                <td>Действия</td>
+                {% endif %}
            </tr>
 
            <!-- Для каждого товара будете генерироваться новая строчка,
@@ -42,6 +48,15 @@ Posts
                <td>{{ post.post_time|date:'M d Y' }}</td>
                <td>{{ post.text|censor|truncatewords:20 }}</td>
                <td>{{ post.post_type }}</td>
+               <td>
+                   {% if perms.newses.news_update %}
+                   <a href="{% url 'news_update' pk=post.id %}">Изменить</a>
+                    {% endif %}
+                   {% if perms.newses.news_delete %}
+                    <a href="{% url 'news_delete' post.id %}">Удалить</a>
+                    {% endif %}
+
+               </td>
 
 
            </tr>

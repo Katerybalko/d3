@@ -1,7 +1,7 @@
 from django.contrib.sites import requests
 from django.shortcuts import render
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
@@ -39,8 +39,8 @@ class ProductDetail(DetailView):
 
 
 class NewsCreate(LoginRequiredMixin, CreateView):
+    permission_required = ('newses.add_post',)
     raise_exception = True
-    permission_required = 'news.add_post'
     form_class = PostForm
     model = Post
     template_name = 'news_edit.html'
@@ -58,24 +58,28 @@ class NewsCreate(LoginRequiredMixin, CreateView):
 
 
 class NewsUpdate(UpdateView):
+    permission_required = ('newses.news_edit',)
     form_class = PostForm
     model = Post
     template_name = 'news_edit.html'
 
 
 class NewsDelete(DeleteView):
+    permission_required = ('newses.news_delete',)
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
 
 class ArticleUpdate(UpdateView):
+    permission_required = ('newses.article_edit',)
     form_class = PostForm
     model = Post
     template_name = 'article_edit.html'
 
 class ArticleDelete(DeleteView):
+    permission_required = ('newses.article_delete',)
     model = Post
-    template_name = 'post_delete.html'
+    template_name = 'article_delete.html'
     success_url = reverse_lazy('post_list')
 
 # Create your views here.
