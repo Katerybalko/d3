@@ -2,10 +2,14 @@
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed
 from django.template.loader import render_to_string
-
 from news import settings
-from news.settings import SITE_URL
 from newses.models import PostCategory
+from django.core.mail import EmailMultiAlternatives
+from django.contrib import messages
+
+
+
+
 
 def send_notifications(preview, pk, title, subscribers):
     html_context = render_to_string(
@@ -16,7 +20,7 @@ def send_notifications(preview, pk, title, subscribers):
         }
     )
 
-    msg - EmailMultiAlternatives(
+    msg = EmailMultiAlternatives(
         subject=title,
         body='',
         from_email=settings.DEFAULT_FROM_EMAIL,
@@ -35,5 +39,5 @@ def notify_about_new_post(sender, instance, **kwargs):
 
         subscribers = [s.email for s in subscribers]
 
-        send_notifications(instance.preview(), instance.pk(), instance.title(), subscribers)
+        send_notifications(instance.preview(), instance.pk, instance.title, subscribers)
 

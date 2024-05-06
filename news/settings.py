@@ -180,3 +180,7 @@ MANAGERS = (
     ('katerybalko', 'so_chocolateatelier@gmail.com'),
     ('Test', 'laconic.jw@gmail.com'),
 )
+
+APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
