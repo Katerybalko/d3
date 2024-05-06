@@ -41,12 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'newses',
+    'newses.apps.NewsesConfig',
     'django_filters',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
 ]
 
 SITE_ID = 1
@@ -75,16 +76,21 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` обязательно нужен этот процессор
                 'django.template.context_processors.request',
             ],
         },
     },
 ]
 
+
+# Этого раздела может не быть, добавьте его в указанном виде.
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
 
 WSGI_APPLICATION = 'news.wsgi.application'
 
@@ -149,8 +155,28 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+SITE_URL = 'http://127.0.0.1:8000/'
+
 
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
 LOGIN_REDIRECT_URL = "/news"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "katerybalko2022@yandex.ru"
+EMAIL_HOST_PASSWORD = "qeyomavaqqamnqcr"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = "katerybalko2022@yandex.ru"
+
+
+SERVER_EMAIL = "katerybalko2022@yandex.ru"
+MANAGERS = (
+    ('katerybalko', 'so_chocolateatelier@gmail.com'),
+    ('Test', 'laconic.jw@gmail.com'),
+)

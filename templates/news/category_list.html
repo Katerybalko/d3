@@ -8,21 +8,18 @@ Posts
 {% endblock title %}
 
 {% block content %}
-   <h1>Всего новостей: {{posts|length}}</h1>
-<h3>{% current_time '%b %d %Y' %}</h3>
-<h3> {{ next_post|default_if_none:"Чуть позже сообщим о новых постах!" }} </h3>
-   <hr>
- <form action="" method="get">
-     <h1>Поиск</h1>
-       {{ filterset.form.as_p }}
-       <input type="submit" value="Найти" />
-   </form>
 
-   <hr>
-{% if perms.newses.news_create or perms.newses.article_create %}
-    <a href="{% url 'news_create' %}">Добавить новость</a>
-<a href="{% url 'article_create' %}">Добавить статью</a>
-    {% endif %}
+<h3></h3>
+<h3>{% current_time '%b %d %Y' %}</h3>
+
+{% if is_not_subscriber %}
+<p class="text-center"><a href="{% url 'subscribe' category.id %}" class="btn btn-secondary btn-sm">Подписаться на категорию "{{category}}"</a></p>
+{% else %}
+       <h2>Вы уже подписаны на категорию "{{category}}"</h2>
+{% endif %}
+
+
+
    {% if posts %}
        <table>
            <tr>
@@ -71,7 +68,7 @@ Posts
 
        </table>
    {% else %}
-       <h2>Новостей нет!</h2>
+       <h2></h2>
    {% endif %}
    {# Информация о предыдущих страницах #}
    {% if page_obj.has_previous %}
@@ -94,3 +91,7 @@ Posts
 
 {% endblock content %}
 
+
+{% if is_not_subscriber %}
+<p class="text-center"><a href="{% url 'subscribe' category.id %}" class="btn btn-secondary btn-sm">Подписаться</a></p>
+{% endif %}
