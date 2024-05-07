@@ -79,8 +79,7 @@ class Post(models.Model):
         return small_text
 
     def get_absolute_url(self):
-        return f'/news/{self.id}'
-
+        return f'news/{self.id}'
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -103,6 +102,17 @@ class Comment(models.Model):
         self.save()
 
 
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+    category = models.ForeignKey(
+        to='Category',
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
 from django.db import models
 
 # Create your models here.
