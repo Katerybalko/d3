@@ -1,6 +1,6 @@
 from django.contrib.sites import requests
 from django.shortcuts import render
-
+from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -8,8 +8,12 @@ from .models import Post, Category
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
+from django.utils.translation import gettext as _
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -37,6 +41,17 @@ class ProductDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
+    queryset = Post.objects.all()
+
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'post-{self.kwargs["pk"]}',
+                        None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+            return obj
 
 
 class NewsCreate(LoginRequiredMixin, CreateView):
@@ -109,6 +124,11 @@ def subscribe(request, pk):
     return render(request, 'news/subscribe.html', {'category': category, 'message': message })
 
 
+class Index():
+    def get(self, request):
+        string = _('Hello world')
+
+        return HttpResponse(string)
 # Create your views here.
 
 
